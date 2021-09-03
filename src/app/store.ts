@@ -1,7 +1,9 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import pagamentoSlice from './redux/pagamento.slice';
 
 export const store = configureStore({
   reducer: {
+    pagamento: pagamentoSlice
   },
 });
 
