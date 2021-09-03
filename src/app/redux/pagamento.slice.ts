@@ -42,7 +42,7 @@ const pagamentoSlice = createSlice({
                 let novoItem: Itens[] = [];
                 
                 _lodash.forEach(action.payload.itens, iten =>{
-                    novoItem.push({id: uuidv4(), descricao: iten.descricao, valor: iten.valor, pago: iten.pago});
+                    novoItem.push({id: uuidv4(), descricao: iten.descricao, valor: iten.valor, pago: false});
                 });
 
                 state.lancamentos?.push({...action.payload, mes: action.payload.mes + 1, itens:novoItem});
