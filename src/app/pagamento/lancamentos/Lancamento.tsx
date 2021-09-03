@@ -1,10 +1,11 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useMemo, useState } from 'react'
 import { useAppDispatch } from '../../hooks'
 import { clonarLancamento, indicarItem, Itens, LancamentoState, removerLancamento } from '../../redux/pagamento.slice'
 import { Calendario } from '../../util/Calendario';
 import ItemLancamento from './ItemLancamento';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfirmarBtn } from '../../components/ConfirmarBtn';
+import { RemoverBtn } from '../../components/RemoverBtn';
 
 interface Props {
     lancamento:LancamentoState,
@@ -40,6 +41,8 @@ export default function Lancamento(dados: Props): ReactElement{
     }
     
     const bordaIndicacao = `h-full p-6 rounded-lg border-2 ${dados.numero ? "border-gray-300": "border-blue-300"} flex flex-col relative overflow-hidden`;
+
+    const totalItens = useMemo(() => dados.lancamento?.itens.length, [dados.lancamento?.itens]);
 
     return (
     <div className="p-4 xl:w-1/4 md:w-1/2 w-full">
@@ -85,13 +88,9 @@ export default function Lancamento(dados: Props): ReactElement{
                 </button>
                 <ConfirmarBtn desabilitado={(item.descricao == "" || item.valor == 0)} acao={handleCompletarLancamento}></ConfirmarBtn>
             </div>
-            <div className="flex items-center mt-3">
-                <span>Remover:</span>
-                <svg 
-                onClick={handleRemoverLancamento}
-                className="w-5 h-4 mr-auto cursor-pointer hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+            <div className="flex items-end mt-3">
+                <RemoverBtn acao={handleRemoverLancamento} exibirTitulo={true}></RemoverBtn>
+                <span className="absolute right-6">Total Itens: {totalItens}</span>
             </div>
         </div>
     </div>
