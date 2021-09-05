@@ -1,4 +1,4 @@
-import React, {  } from 'react';
+import React, { useEffect } from 'react';
 import Header from './app/header/Header';
 import { useAppSelector } from './app/hooks';
 import imgPay from './app/img/pay.png';
@@ -8,11 +8,25 @@ import Resumo from './app/resumo-valores/Resumo';
 import Usuario from './app/usuario/Usuario';
 import _lodash from "lodash";
 import './App.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
   const pagamentoState = useAppSelector((state) => state.pagamento);
   
+  useEffect(() => {
+    toast.info('Sincronizando com o servidor!', {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }, [])
+
   return (
     <div>
       <Header titulo="Simple Fin"></Header>
@@ -44,6 +58,7 @@ function App() {
           </div>
         </section>
       </section>
+      <ToastContainer position="bottom-left"/>
     </div>
   );
 }
