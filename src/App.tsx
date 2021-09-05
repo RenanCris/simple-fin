@@ -7,6 +7,7 @@ import Lancamento from './app/pagamento/lancamentos/Lancamento';
 import Resumo from './app/resumo-valores/Resumo';
 import Usuario from './app/usuario/Usuario';
 import _lodash from "lodash";
+import './App.css';
 
 function App() {
 
@@ -15,12 +16,12 @@ function App() {
   return (
     <div>
       <Header titulo="Simple Fin"></Header>
-      <section className="bg-gray-200 bg-opacity-25 max-h-px overflow-y-scroll">
+      <section className="bg-gray-200 bg-opacity-25 max-h-px overflow-y-scroll conteudo ">
         <section className="text-gray-600 body-font">
           <div className="container px-5 py-10 mx-auto">
-            <div className="flex flex-row -m-4 bg-white">
+            <div className="flex flex-row -m-4 bg-white shadow-md rounded-lg">
               <div className="p-4 lg:w-1/4">
-                <div className="flex rounded-lg border-gray-200 border-opacity-50 p-4 justify-center sm:flex-row flex-col">
+                <div className="flex rounded-lg border-opacity-50 p-4 justify-center sm:flex-row flex-col ">
                   <img src={imgPay} className="h-40" alt="pagamento painel"></img>
                 </div>
               </div>
@@ -31,7 +32,7 @@ function App() {
         </section>
         <section className="text-gray-600 body-font overflow-hidden">
           <div className="container px-5 pt-7 pb-10 mx-auto">
-            <div className="flex flex-wrap -m-4 bg-white">
+            <div className="flex flex-wrap -m-4 bg-white shadow-md rounded-lg">
               <MesInclusao></MesInclusao>
               {
                 _lodash.orderBy(pagamentoState.lancamentos,['mes'],['desc'])

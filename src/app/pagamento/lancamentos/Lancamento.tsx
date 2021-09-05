@@ -10,7 +10,8 @@ import NumberFormat from 'react-number-format';
 import _lodash from "lodash";
 import { MoedaFormat } from '../../components/MoedaFormat';
 import Moment from 'react-moment';
-// import 'moment-timezone';
+import 'moment-timezone';
+import 'moment/locale/pt-br';
 
 interface Props {
     lancamento:LancamentoState,
@@ -47,7 +48,7 @@ export default function Lancamento(dados: Props): ReactElement{
         })
     }
     
-    const bordaIndicacao = `h-full p-6 rounded-lg border-2 ${dados.numero ? "border-gray-300": "border-blue-300"} flex flex-col relative overflow-hidden`;
+    const bordaIndicacao = `h-full shadow-xl p-6 rounded-lg border-2 ${dados.numero ? "border-gray-200": "border-blue-300"} flex flex-col relative overflow-hidden`;
 
     const totalItens = useMemo(() => dados.lancamento?.itens.length, [dados.lancamento?.itens]);
     const totalSomatorio = useMemo(() => _lodash.sumBy(dados.lancamento.itens, (obj) => obj.valor), [dados.lancamento?.itens]);
@@ -64,8 +65,8 @@ export default function Lancamento(dados: Props): ReactElement{
                     <span className="bg-blue-300 text-white px-3 py-1 tracking-widest text-xs absolute right-0 top-0 rounded-bl">Vigênte</span>
                 :""
             }
-            <h2 className="text-sm tracking-widest title-font mb-1 font-medium">Mês: 
-                <Moment format="MMM/YYYY">
+            <h2 className="text-sm tracking-widest title-font mb-1 font-medium">Mês:&nbsp;
+                <Moment format="MMMM/YYYY">
                    {new Date(dados.lancamento.ano,dados.lancamento.mes - 1)}
                 </Moment>
             </h2>
@@ -124,7 +125,7 @@ export default function Lancamento(dados: Props): ReactElement{
             </div>
             <div className="flex items-end mt-3">
                 <RemoverBtn acao={handleRemoverLancamento} exibirTitulo={true}></RemoverBtn>
-                <span className="absolute right-6">Total Itens: {totalItens}</span>
+                <span className="absolute right-6 text-blue-500">Total Itens: {totalItens}</span>
             </div>
         </div>
     </div>

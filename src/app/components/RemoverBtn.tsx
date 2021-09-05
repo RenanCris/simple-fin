@@ -11,7 +11,7 @@ export const RemoverBtn = (props: Props) => {
 
     return (
         <div className="flex items-center mt-3">
-            { props.exibirTitulo ? <span>Remover:</span> : ""}
+            { props.exibirTitulo ? <span className="text-sm">Remover:</span> : ""}
             <svg 
                 onClick={props.acao}
                 className={classEstilo} fill="none" viewBox="0 0 24 24" stroke="currentColor">
