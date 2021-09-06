@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Header from './app/header/Header';
-import { useAppSelector } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import imgPay from './app/img/pay.png';
 import MesInclusao from './app/pagamento/inclusao-mes/MesInclusao';
 import Lancamento from './app/pagamento/lancamentos/Lancamento';
@@ -10,22 +10,53 @@ import _lodash from "lodash";
 import './App.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Api from './app/api/Api';
+import { indicarConfiguracaoBasicaPagamento, indicarLancamento } from './app/redux/pagamento.slice';
+import { io, Socket } from 'socket.io-client';
 
 function App() {
 
   const pagamentoState = useAppSelector((state) => state.pagamento);
+  const usuarioState = useAppSelector((state) => state.usuario);
+  const dispatch = useAppDispatch();
   
   useEffect(() => {
-    toast.info('Sincronizando com o servidor!', {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+    const usuario = usuarioState.nome;
+    const ano = 2021;
+    
+    dispatch(indicarConfiguracaoBasicaPagamento({usuario: usuario, ano: ano}));
+
+    if(!usuario) return;
+
+    Api.get(`${usuario}/ano/${ano}`).then(res =>{
+      if(res.data)
+      [...res.data["lancamentos"]].forEach(lancamento=> {
+        dispatch(indicarLancamento(lancamento));
       });
-  }, [])
+    });
+    
+    
+  }, [usuarioState])
+
+  const socket = useMemo<Socket>(() => io('http://localhost:3001', {transports: ['websocket', 'polling', 'flashsocket']}), [])
+
+  useEffect(() => {
+    socket.emit('lancamento-pagamento',pagamentoState);
+  }, [pagamentoState.lancamentos])
+
+  useEffect(() => {
+    socket.on('connect', () =>{
+      toast.success('Servidor Concectado!', {
+        position: "bottom-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    });
+  }, [socket])
 
   return (
     <div>

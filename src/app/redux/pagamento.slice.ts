@@ -10,6 +10,8 @@ export interface Itens{
 }
 
 export interface PagamentosState{
+    usuario:string;
+    ano:number;
     lancamentos?: Array<LancamentoState>;
 }
 
@@ -19,7 +21,7 @@ export interface LancamentoState {
     itens: Array<Itens>;
 }
 
-const initialState = {lancamentos : new Array<LancamentoState>()} as PagamentosState;
+const initialState = {lancamentos : new Array<LancamentoState>(), usuario:'', ano: 0} as PagamentosState;
 
 const pagamentoSlice = createSlice({
     name : 'pagamentos',
@@ -61,9 +63,13 @@ const pagamentoSlice = createSlice({
                 }
             })
         },
+        indicarConfiguracaoBasicaPagamento(state, action: PayloadAction<PagamentosState>){
+            state.usuario = action.payload.usuario;
+            state.ano = action.payload.ano;
+        }
     }
 });
 
-export const {indicarLancamento, removerLancamento, indicarItem , clonarLancamento,removerItem, mudarSituacaoItem} = pagamentoSlice.actions;
+export const {indicarLancamento, removerLancamento, indicarItem , clonarLancamento,removerItem, mudarSituacaoItem, indicarConfiguracaoBasicaPagamento} = pagamentoSlice.actions;
 export default pagamentoSlice.reducer;
 

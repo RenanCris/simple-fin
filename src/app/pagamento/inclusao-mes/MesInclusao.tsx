@@ -1,47 +1,56 @@
 import React, { ReactElement, useState } from 'react'
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { indicarLancamento, LancamentoState } from '../../redux/pagamento.slice';
 import { Calendario } from '../../util/Calendario';
+import moment from 'moment';
+import { Select } from '../../components/Select';
+import { toast } from 'react-toastify';
 
 interface Props {    
 }
 
 export default function MesInclusao(data: Props): ReactElement {
+    const pagamentoState = useAppSelector((state) => state.pagamento);
     const [meses] = useState(Calendario.MesesAno());
     const [lancamento, setLancamento] = useState<LancamentoState>({mes:0, ano: 0, itens:[]});
 
     const dispatch = useAppDispatch();
 
     const handleMes = () =>{
-        dispatch(indicarLancamento(lancamento))
+
+        if(pagamentoState.usuario)
+            dispatch(indicarLancamento(lancamento))
+        else
+            toast.warn('Nenhum usuário indicado!', {
+                position: "bottom-left",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
     }
 
     const ConvertCalendarioMes = (numeroMes: any) : LancamentoState =>{
         let _calendario = Calendario.MesesAno().find(x=> x.mes === parseInt(numeroMes)) ?? lancamento;
-        return {mes: _calendario?.mes, ano: _calendario?.ano, itens:[]};
+        return {mes: _calendario?.mes, ano: pagamentoState.ano, itens:[]};
     }
 
     return (
         <div className="p-4 xl:w-1/4 md:w-1/2 w-full">
             <div className="p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden">
                 <div className="flex items-center mb-4">
-                    <div className="relative w-full">
-                        <select 
-                            onChange={(e)=> setLancamento(ConvertCalendarioMes(e.target.value))}
-                            className="rounded border w-full appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 text-base pl-3 pr-10">
-                            <option>Meses</option>
-                            {
-                                meses.map(m =>(
-                                    <option key={m.mes} value={m.mes}>{m.mes}/{m.ano}</option>
-                                ))
-                            }
-                        </select>
-                        <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
-                            <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="w-4 h-4" viewBox="0 0 24 24">
-                                <path d="M6 9l6 6 6-6"></path>
-                            </svg>
-                        </span>
-                    </div>
+                    <Select acao={(e)=> setLancamento(ConvertCalendarioMes(e.target.value))}>
+                        <option>Meses</option>
+                        {
+                            meses.map(m =>(
+                                <option key={m.mes} value={m.mes}>
+                                    {moment(new Date(pagamentoState.ano,m.mes -1)).format('MMM/YY')}
+                                </option>
+                            ))
+                        }
+                    </Select>
                 </div>
                 <button 
                     onClick={handleMes}

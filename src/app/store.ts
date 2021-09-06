@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import pagamentoSlice from './redux/pagamento.slice';
+import usuarioSlice from './redux/usuario.slice';
 
 export const store = configureStore({
   reducer: {
-    pagamento: pagamentoSlice
+    pagamento: pagamentoSlice,
+    usuario:usuarioSlice
   },
 });
 
