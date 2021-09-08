@@ -34,8 +34,6 @@ function App() {
         dispatch(indicarLancamento(lancamento));
       });
     });
-    
-    
   }, [usuarioState])
 
   const socket = useMemo<Socket>(() => io('http://localhost:3001', {transports: ['websocket', 'polling', 'flashsocket']}), [])
