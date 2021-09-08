@@ -26,7 +26,7 @@ export default function ItemLancamento(data: Props): ReactElement {
         data.cloneFilho(data.item);
     }
 
-    const classItemMarcacao = `w-4 h-4 mr-2 inline-flex items-center justify-center ${data.item.pago ? "bg-green-300": "bg-yellow-300"} text-white rounded-full flex-shrink-0`
+    const classItemMarcacao = `w-4 cursor-pointer h-4 mr-2 inline-flex items-center justify-center ${data.item.pago ? "bg-green-300": "bg-yellow-300"} text-white rounded-full flex-shrink-0`
 
     return (
         <div className="flex items-center text-gray-600 mb-2">

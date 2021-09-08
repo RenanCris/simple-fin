@@ -4,6 +4,7 @@ import Api from '../api/Api';
 import { useAppSelector } from '../hooks';
 import _lodash from "lodash";
 import moment from "moment";
+import { Box, BoxContent, BoxIconContent } from '../templates/Templates';
 
 interface Props {
     
@@ -11,30 +12,39 @@ interface Props {
 
 export default function Resumo(data: Props): ReactElement {
     const pagamentoState = useAppSelector((state) => state.pagamento);
+    const usuarioState = useAppSelector((state) => state.usuario);
     const [dados, setDados] = useState([{}]);
 
     useEffect(() => {
-      if(!pagamentoState.usuario) return;
+        atualizarConteudo();
+      }, [])
 
-      Api.get(`totais/${pagamentoState.usuario}/ano/${pagamentoState.ano}`).then(res =>{
-        if(res.data[0]){
-          let _dadosOrdenados =  _lodash.orderBy(res.data[0]["despesas"],['mes'],['desc']).map(dados =>{
-            dados['mesDesc'] = moment(new Date(pagamentoState.ano,parseInt(dados['mes']) -1)).format('MMM/YY');
-            return dados;
-          });
-          setDados(_dadosOrdenados);
-        }
-      });
-    }, [pagamentoState])
+    useEffect(() => {
+     setTimeout(()=>  atualizarConteudo(), 100);
+    }, [pagamentoState.lancamentos, usuarioState])
+
+    const atualizarConteudo = () =>{
+        if(!pagamentoState.usuario) return;
+
+        Api.get(`totais/${pagamentoState.usuario}/ano/${pagamentoState.ano}`).then(res =>{
+          if(res.data[0]){
+            let _dadosOrdenados =  _lodash.orderBy(res.data[0]["despesas"],['mes'],['desc']).map(dados =>{
+              dados['mesDesc'] = moment(new Date(pagamentoState.ano,parseInt(dados['mes']) -1)).format('MMM/YY');
+              return dados;
+            });
+            setDados(_dadosOrdenados);
+          }
+        });
+    }
 
     return (
-        <div className="p-8 lg:w-1/2 md:w-1/2">
-            <div className="flex border-2 rounded-lg border-gray-200 border-opacity-50 p-10 sm:flex-row flex-col">
-                <div className="w-16 h-16 sm:mr-8 sm:mb-0 mb-4 inline-flex items-center justify-center rounded-full bg-blue-100 text-blue-500 flex-shrink-0">
+        <Box>
+            <BoxContent>
+                <BoxIconContent>
                     <svg fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth={2} className="w-8 h-8" viewBox="0 0 24 24">
                         <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                     </svg>
-                </div>
+                </BoxIconContent>
                 <div className="flex-grow">
                     <h2 className="text-gray-900 text-lg title-font font-medium mb-3">Resumo</h2>
                     <LineChart
@@ -56,7 +66,7 @@ export default function Resumo(data: Props): ReactElement {
                             <Line type="monotone" name="total" dataKey="sum" stroke="#82ca9d" />
                         </LineChart>
                 </div>
-            </div>
-        </div>
+            </BoxContent>
+        </Box>
     )
 }

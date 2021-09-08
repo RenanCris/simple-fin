@@ -14,12 +14,6 @@ export default function Header(head: Props): ReactElement {
                     </svg>
                     <span className="ml-3 text-xl">{head.titulo}</span>
                 </div>
-                <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
-                    {/* <a className="mr-5 hover:text-gray-900 text-white">First Link</a>
-                    <a className="mr-5 hover:text-gray-900 text-white">Second Link</a>
-                    <a className="mr-5 hover:text-gray-900 text-white">Third Link</a>
-                    <a className="mr-5 hover:text-gray-900 text-white">Fourth Link</a> */}
-                </nav>
             </div>
         </header>
     )
