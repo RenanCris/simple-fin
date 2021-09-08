@@ -3,9 +3,9 @@ services:
   client:
     restart: unless-stopped
     container_name: fin_client
-        build:
-            context: .
-            dockerfile: Dockerfile
+    build:
+        context: .
+        dockerfile: Dockerfile
     ports:
       - 8006:3000
     volumes:
@@ -13,5 +13,4 @@ services:
     environment: 
       - REACT_APP_URL_API=http://192.168.0.20:8005/
     command: yarn start
-    tty: true
-    stdin_open: true
+    
