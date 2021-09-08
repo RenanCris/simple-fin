@@ -36,7 +36,7 @@ function App() {
     });
   }, [usuarioState])
 
-  const socket = useMemo<Socket>(() => io('http://localhost:3001', {transports: ['websocket', 'polling', 'flashsocket']}), [])
+  const socket = useMemo<Socket>(() => io(`${process.env.REACT_APP_URL_API}`, {transports: ['websocket', 'polling', 'flashsocket']}), [])
 
   useEffect(() => {
     socket.emit('lancamento-pagamento',pagamentoState);
