@@ -9,7 +9,7 @@ services:
     ports:
       - 8006:3000
     volumes:
-      - ./client:/app-fin
+      - /app-fin
     environment: 
       - REACT_APP_URL_API=http://192.168.0.20:8005/
     command: yarn start
