@@ -22,7 +22,7 @@ function App() {
   
   useEffect(() => {
     const usuario = usuarioState.nome;
-    const ano = 2021;
+    const ano = new Date().getFullYear();
     
     dispatch(indicarConfiguracaoBasicaPagamento({usuario: usuario, ano: ano}));
 
